@@ -1,34 +1,24 @@
-package com.mathffreitas.app.appws.model;
+package com.mathffreitas.app.appws.model.request;
 
-import javax.persistence.*;
 import java.util.UUID;
 
-@Entity
-@Table(name = "user")
-public class UserDetail {
+public class UserDetailsRequestModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private UUID id;
 
-    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "email")
     private String email;
 
-    @Column(name = "password")
     private String password;
 
-    public UserDetail() {
+    public UserDetailsRequestModel() {
 
     }
 
-    public UserDetail(String firstName, String lastName, String email, String password) {
+    public UserDetailsRequestModel(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

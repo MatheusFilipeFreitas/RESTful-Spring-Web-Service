@@ -1,11 +1,19 @@
 package com.mathffreitas.app.appws.controller;
 
-import com.mathffreitas.app.appws.model.UserDetail;
+import com.mathffreitas.app.appws.dto.UserDto;
+import com.mathffreitas.app.appws.model.response.UserRest;
+import com.mathffreitas.app.appws.model.request.UserDetailsRequestModel;
+import com.mathffreitas.app.appws.service.UserService;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("users") // http://localhost:8080/users
 public class UserController {
+
+    @Autowired
+    UserService userService;
 
     @GetMapping
     public String getUser() {
@@ -13,8 +21,16 @@ public class UserController {
     }
 
     @PostMapping
-    public String createUser(@RequestBody UserDetail userDetails) {
-        return "create user was called";
+    public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) {
+        UserRest returnValue = new UserRest();
+
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(userDetails, userDto);
+
+        UserDto createdUser = userService.createUser(userDto);
+        BeanUtils.copyProperties(createdUser, returnValue);
+
+        return returnValue;
     }
 
     @PutMapping
