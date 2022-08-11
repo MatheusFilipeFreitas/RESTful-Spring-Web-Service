@@ -3,12 +3,16 @@ package com.mathffreitas.app.appws.service;
 import com.mathffreitas.app.appws.dto.UserDto;
 import com.mathffreitas.app.appws.entity.UserEntity;
 import com.mathffreitas.app.appws.repository.UserRepository;
+import com.mathffreitas.app.appws.shared.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService{
+
+    @Autowired
+    Utils utils;
 
     @Autowired
     UserRepository userRepository;
@@ -22,8 +26,9 @@ public class UserServiceImpl implements UserService{
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(user, userEntity);
 
+        String publicUserId = utils.generateUserId(30);
         userEntity.setEncryptedPassword("test");
-        userEntity.setUserId("testUserId");
+        userEntity.setUserId(publicUserId);
 
         UserEntity storedUserDetail = userRepository.save(userEntity);
 
