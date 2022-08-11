@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface UserRepository extends CrudRepository<UserEntity, UUID> {
-
-    // UserEntity findUserByEmail(String email);
+public interface UserRepository extends CrudRepository<UserEntity, UUID>{
+    UserEntity findUserByEmail(String email);
 }
