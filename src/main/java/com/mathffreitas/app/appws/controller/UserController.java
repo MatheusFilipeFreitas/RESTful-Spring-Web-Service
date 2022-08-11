@@ -1,5 +1,6 @@
 package com.mathffreitas.app.appws.controller;
 
+import com.mathffreitas.app.appws.model.UserDetail;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,7 +13,7 @@ public class UserController {
     }
 
     @PostMapping
-    public String createUser() {
+    public String createUser(@RequestBody UserDetail userDetails) {
         return "create user was called";
     }
 
