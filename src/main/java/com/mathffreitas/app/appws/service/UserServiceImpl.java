@@ -6,6 +6,9 @@ import com.mathffreitas.app.appws.repository.UserRepository;
 import com.mathffreitas.app.appws.shared.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,7 +20,9 @@ public class UserServiceImpl implements UserService{
     @Autowired
     UserRepository userRepository;
 
-    @Override
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
+
     public UserDto createUser(UserDto user) {
 
 
@@ -27,8 +32,8 @@ public class UserServiceImpl implements UserService{
         BeanUtils.copyProperties(user, userEntity);
 
         String publicUserId = utils.generateUserId(30);
-        userEntity.setEncryptedPassword("test");
         userEntity.setUserId(publicUserId);
+        userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
         UserEntity storedUserDetail = userRepository.save(userEntity);
 
@@ -36,5 +41,10 @@ public class UserServiceImpl implements UserService{
         BeanUtils.copyProperties(storedUserDetail, returnValue);
 
         return returnValue;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
     }
 }
