@@ -23,10 +23,22 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, SecurityConstants.SING_UP_URL).permitAll()
                 .anyRequest().authenticated() //any other authentication need to be authenticated
-                .and().addFilter(new AuthenticationFilter(authenticationManager()));
+                .and().addFilter(getAuthenticationFilter());
+                //.and().addFilter(new AuthenticationFilter(authenticationManager())); (/login) url snippet
     }
 
+    @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
+
+    }
+
+    // creating custom user authentication url (login)
+    public AuthenticationFilter getAuthenticationFilter() throws Exception {
+        final AuthenticationFilter filter = new AuthenticationFilter(authenticationManager());
+        filter.setFilterProcessesUrl("/users/login");
+
+        return filter;
+
     }
 }

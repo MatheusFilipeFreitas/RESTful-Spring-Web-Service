@@ -4,6 +4,15 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.UUID;
 
+//Data Transferred Object
+/*
+    @Controller
+    -> Gets the JSON request object (UserDetailsRequestModel)
+    @Service
+    -> Transfer the data to database object (UserEntity)
+    @Controller
+    -> Sends the data to JSON response object (UserRest)
+ */
 public class UserDto implements Serializable{
 
     private UUID id;
