@@ -1,4 +1,4 @@
-package com.mathffreitas.app.appws.model.response;
+package com.mathffreitas.app.appws.model.response.error;
 
 public enum ErrorMessages {
 

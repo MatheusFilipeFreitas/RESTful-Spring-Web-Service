@@ -1,7 +1,6 @@
 package com.mathffreitas.app.appws.exceptions;
 
-import com.mathffreitas.app.appws.model.response.ErrorMessage;
-import com.mathffreitas.app.appws.model.response.ErrorMessages;
+import com.mathffreitas.app.appws.model.response.error.ErrorMessage;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

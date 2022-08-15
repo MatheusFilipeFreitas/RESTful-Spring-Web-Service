@@ -3,7 +3,7 @@ package com.mathffreitas.app.appws.service;
 import com.mathffreitas.app.appws.dto.UserDto;
 import com.mathffreitas.app.appws.entity.UserEntity;
 import com.mathffreitas.app.appws.exceptions.UserServiceException;
-import com.mathffreitas.app.appws.model.response.ErrorMessages;
+import com.mathffreitas.app.appws.model.response.error.ErrorMessages;
 import com.mathffreitas.app.appws.repository.UserRepository;
 import com.mathffreitas.app.appws.shared.Utils;
 import org.springframework.beans.BeanUtils;
@@ -86,6 +86,15 @@ public class UserServiceImpl implements UserService{
         BeanUtils.copyProperties(userEntity,returnValue);
 
         return returnValue;
+    }
+
+    @Override
+    public void deleteUser(String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if(userEntity == null) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+        userRepository.delete(userEntity);
     }
 
     @Override

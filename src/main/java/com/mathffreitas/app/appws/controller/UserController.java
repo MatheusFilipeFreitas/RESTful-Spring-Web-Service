@@ -2,9 +2,12 @@ package com.mathffreitas.app.appws.controller;
 
 import com.mathffreitas.app.appws.dto.UserDto;
 import com.mathffreitas.app.appws.exceptions.UserServiceException;
-import com.mathffreitas.app.appws.model.response.ErrorMessages;
-import com.mathffreitas.app.appws.model.response.UserRest;
+import com.mathffreitas.app.appws.model.response.*;
 import com.mathffreitas.app.appws.model.request.UserDetailsRequestModel;
+import com.mathffreitas.app.appws.model.response.error.ErrorMessages;
+import com.mathffreitas.app.appws.model.response.operation.OperationStatusModel;
+import com.mathffreitas.app.appws.model.response.operation.RequestOperationName;
+import com.mathffreitas.app.appws.model.response.operation.RequestOperationStatus;
 import com.mathffreitas.app.appws.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +53,7 @@ public class UserController {
         return returnValue;
     }
 
-    @PutMapping(path = "/{userId}",consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    @PutMapping(path = "/{userId}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public UserRest updateUser(@PathVariable String userId, @RequestBody UserDetailsRequestModel userDetails) {
         UserRest returnValue = new UserRest();
 
@@ -65,8 +68,15 @@ public class UserController {
         return returnValue;
     }
 
-    @DeleteMapping
-    public String deleteUser() {
-        return "delete user was called";
+    @DeleteMapping(path = "/{userId}")
+    public OperationStatusModel deleteUser(@PathVariable String userId) {
+
+        OperationStatusModel returnValue = new OperationStatusModel();
+        returnValue.setOperationName(RequestOperationName.DELETE.name());
+
+        userService.deleteUser(userId);
+
+        returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+        return returnValue;
     }
 }
