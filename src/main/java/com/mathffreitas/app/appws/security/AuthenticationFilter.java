@@ -1,7 +1,10 @@
 package com.mathffreitas.app.appws.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mathffreitas.app.appws.SpringApplicationContext;
+import com.mathffreitas.app.appws.dto.UserDto;
 import com.mathffreitas.app.appws.model.request.UserLoginRequestModel;
+import com.mathffreitas.app.appws.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -11,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import javax.naming.AuthenticationException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -50,7 +52,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String userName = ((User) authentication.getPrincipal()).getUsername();
         String token = Jwts.builder().setSubject(userName).setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME)).signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET).compact();
 
+        UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
+        UserDto userDto = userService.getUser(userName);
+
         response.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
+        response.addHeader("UserID", userDto.getUserId());
 
     }
 }

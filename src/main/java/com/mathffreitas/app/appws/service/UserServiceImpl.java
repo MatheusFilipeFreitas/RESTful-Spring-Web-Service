@@ -27,8 +27,6 @@ public class UserServiceImpl implements UserService{
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserDto createUser(UserDto user) {
-
-
         if(userRepository.findUserByEmail(user.getEmail()) != null) throw new RuntimeException("Record already exists");
 
         UserEntity userEntity = new UserEntity();
@@ -42,6 +40,16 @@ public class UserServiceImpl implements UserService{
 
         UserDto returnValue = new UserDto();
         BeanUtils.copyProperties(storedUserDetail, returnValue);
+
+        return returnValue;
+    }
+
+    @Override
+    public UserDto getUser(String email) {
+        UserEntity userEntity = userRepository.findUserByEmail(email);
+        UserDto returnValue = new UserDto();
+
+        BeanUtils.copyProperties(userEntity,returnValue);
 
         return returnValue;
     }
