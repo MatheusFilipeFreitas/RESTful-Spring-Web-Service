@@ -1,6 +1,8 @@
 package com.mathffreitas.app.appws.controller;
 
 import com.mathffreitas.app.appws.dto.UserDto;
+import com.mathffreitas.app.appws.exceptions.UserServiceException;
+import com.mathffreitas.app.appws.model.response.ErrorMessages;
 import com.mathffreitas.app.appws.model.response.UserRest;
 import com.mathffreitas.app.appws.model.request.UserDetailsRequestModel;
 import com.mathffreitas.app.appws.service.UserService;
@@ -34,8 +36,10 @@ public class UserController {
      */
 
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) {
+    public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
         UserRest returnValue = new UserRest();
+
+        if(userDetails.getFirstName().isEmpty() || userDetails.getLastName().isEmpty() || userDetails.getEmail().isEmpty() || userDetails.getPassword().isEmpty()) throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(userDetails, userDto);
