@@ -18,11 +18,11 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }) // MediaType for XML & JSON response type support
-    public UserRest getUserById(@PathVariable String id) {
+    @GetMapping(path = "/{userId}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }) // MediaType for XML & JSON response type support
+    public UserRest getUserById(@PathVariable String userId) {
         UserRest returnValue = new UserRest();
 
-        UserDto userDto = userService.getUserByUserId(id);
+        UserDto userDto = userService.getUserByUserId(userId);
         BeanUtils.copyProperties(userDto, returnValue);
 
         return returnValue;
@@ -50,9 +50,19 @@ public class UserController {
         return returnValue;
     }
 
-    @PutMapping
-    public String updateUser() {
-        return "update user was called";
+    @PutMapping(path = "/{userId}",consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    public UserRest updateUser(@PathVariable String userId, @RequestBody UserDetailsRequestModel userDetails) {
+        UserRest returnValue = new UserRest();
+
+        //if(userDetails.getFirstName().isEmpty() || userDetails.getLastName().isEmpty()) throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
+
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(userDetails, userDto);
+
+        UserDto updateUser = userService.updateUser(userId, userDto);
+        BeanUtils.copyProperties(updateUser, returnValue);
+
+        return returnValue;
     }
 
     @DeleteMapping

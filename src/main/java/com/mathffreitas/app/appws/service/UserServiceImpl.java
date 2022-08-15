@@ -2,6 +2,8 @@ package com.mathffreitas.app.appws.service;
 
 import com.mathffreitas.app.appws.dto.UserDto;
 import com.mathffreitas.app.appws.entity.UserEntity;
+import com.mathffreitas.app.appws.exceptions.UserServiceException;
+import com.mathffreitas.app.appws.model.response.ErrorMessages;
 import com.mathffreitas.app.appws.repository.UserRepository;
 import com.mathffreitas.app.appws.shared.Utils;
 import org.springframework.beans.BeanUtils;
@@ -26,8 +28,9 @@ public class UserServiceImpl implements UserService{
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Override
     public UserDto createUser(UserDto user) {
-        if(userRepository.findUserByEmail(user.getEmail()) != null) throw new RuntimeException("Record already exists");
+        if(userRepository.findUserByEmail(user.getEmail()) != null) throw new UserServiceException(ErrorMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
 
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(user, userEntity);
@@ -46,11 +49,28 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public UserDto updateUser(String userId, UserDto user) {
+        UserDto returnValue = new UserDto();
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if(userEntity == null) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+        userEntity.setFirstName(user.getFirstName());
+        userEntity.setLastName(user.getLastName());
+
+        UserEntity updatedUserDetail = userRepository.save(userEntity);
+
+        BeanUtils.copyProperties(updatedUserDetail, returnValue);
+
+        return returnValue;
+    }
+
+    @Override
     public UserDto getUserByUserId(String userId) {
         UserDto returnValue = new UserDto();
         UserEntity userEntity = userRepository.findByUserId(userId);
 
-        if(userEntity == null) throw new UsernameNotFoundException(userId);
+        if(userEntity == null) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
         BeanUtils.copyProperties(userEntity, returnValue);
 
@@ -72,7 +92,7 @@ public class UserServiceImpl implements UserService{
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findUserByEmail(email);
 
-        if(userEntity == null) throw new UsernameNotFoundException(email);
+        if(userEntity == null) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
         return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
     }

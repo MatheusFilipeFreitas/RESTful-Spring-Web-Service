@@ -1,14 +1,13 @@
 package com.mathffreitas.app.appws.entity;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 @Entity(name = "users")
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false)
     private String userId;
@@ -30,11 +29,11 @@ public class UserEntity {
     @Column(nullable = false)
     private Boolean emailVerificationStatus = false;
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
