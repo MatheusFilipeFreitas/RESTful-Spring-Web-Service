@@ -18,7 +18,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     public WebSecurity(UserService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userDetailsService = userDetailsService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        
+
     }
 
     @Override
@@ -26,11 +26,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, SecurityConstants.SING_UP_URL).permitAll()
                 .anyRequest().authenticated() //any other authentication need to be authenticated
                 .and().addFilter(getAuthenticationFilter())
-                .addFilter(new AuthorizationFilter(authenticationManager()));
-                //.and().addFilter(new AuthenticationFilter(authenticationManager())); (/login) url snippet
+                .addFilter(new AuthorizationFilter(authenticationManager()))
+                //.and().addFilter(new AuthenticationFilter(authenticationManager())) (/login) url snippet
 
-        // fix the cookie issue
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                // fix the cookie issue (prevent authorization header from been cashed)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
     }
 
