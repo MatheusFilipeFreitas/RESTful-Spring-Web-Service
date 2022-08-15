@@ -6,6 +6,7 @@ import com.mathffreitas.app.appws.model.request.UserDetailsRequestModel;
 import com.mathffreitas.app.appws.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,7 +16,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }) // MediaType for XML & JSON response type support
     public UserRest getUserById(@PathVariable String id) {
         UserRest returnValue = new UserRest();
 
@@ -25,12 +26,14 @@ public class UserController {
         return returnValue;
     }
 
-    @GetMapping
+    /*
+    @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public String getUser() {
         return "get user was called";
     }
+     */
 
-    @PostMapping
+    @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) {
         UserRest returnValue = new UserRest();
 

@@ -1,0 +1,15 @@
+JSON
+{
+    "firstName": "Sergey",
+    "lastName": "Kargopolov",
+    "email": "test9@test.com",
+    "password": "123"
+}
+
+XML
+<UserDetailsRequestModel>
+<firstName>Sergey</firstName>
+<lastName>Kargopolov</lastName>
+<email>test@test.com</email>
+<password>123</password>
+</UserDetailsRequestMode>
