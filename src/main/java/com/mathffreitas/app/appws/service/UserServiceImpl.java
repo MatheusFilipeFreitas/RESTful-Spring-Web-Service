@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDto createUser(UserDto user) {
-        if(userRepository.findUserByEmail(user.getEmail()) != null) throw new UserServiceException(ErrorMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
+        if(userRepository.findUserByEmail(user.getEmail()) != null) throw new UserServiceException(ErrorMessages.USER_RECORD_ALREADY_EXISTS.getErrorMessage());
 
         for(int i = 0; i < user.getAddresses().size(); i++) {
             AddressDto address = user.getAddresses().get(i);
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService{
         UserDto returnValue = new UserDto();
         UserEntity userEntity = userRepository.findByUserId(userId);
 
-        if(userEntity == null) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        if(userEntity == null) throw new UserServiceException(ErrorMessages.USER_NO_RECORD_FOUND.getErrorMessage());
 
         BeanUtils.copyProperties(userEntity, returnValue);
 
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService{
         UserDto returnValue = new UserDto();
         UserEntity userEntity = userRepository.findByUserId(userId);
 
-        if(userEntity == null) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        if(userEntity == null) throw new UserServiceException(ErrorMessages.USER_NO_RECORD_FOUND.getErrorMessage());
 
         userEntity.setFirstName(user.getFirstName());
         userEntity.setLastName(user.getLastName());
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService{
     public void deleteUser(String userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
 
-        if(userEntity == null) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        if(userEntity == null) throw new UserServiceException(ErrorMessages.USER_NO_RECORD_FOUND.getErrorMessage());
 
         userRepository.delete(userEntity);
     }
@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService{
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findUserByEmail(email);
 
-        if(userEntity == null) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        if(userEntity == null) throw new UserServiceException(ErrorMessages.USER_NO_RECORD_FOUND.getErrorMessage());
 
         return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
     }

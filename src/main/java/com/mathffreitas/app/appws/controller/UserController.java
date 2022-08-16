@@ -89,6 +89,15 @@ public class UserController {
         return returnValue;
     }
 
+    @GetMapping(path = "/{userId}/addresses/{addressId}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    public AddressesRest getUserAddress(@PathVariable String addressId, @PathVariable String userId) {
+        AddressDto addressDto = addressService.getAddress(addressId, userId);
+
+        ModelMapper modelMapper = new ModelMapper();
+
+        return modelMapper.map(addressDto, AddressesRest.class);
+    }
+
     @PutMapping(path = "/{userId}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public UserRest updateUser(@PathVariable String userId, @RequestBody UserDetailsRequestModel userDetails) {
         UserRest returnValue = new UserRest();

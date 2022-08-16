@@ -2,14 +2,23 @@ package com.mathffreitas.app.appws.model.response.error;
 
 public enum ErrorMessages {
 
+    // for all
     MISSING_REQUIRED_FIELD("Missing required field. Please check documentation for required fields"),
-    RECORD_ALREADY_EXISTS("Record already exists"),
     INTERNAL_SERVER_ERROR("Internal server error"),
-    NO_RECORD_FOUND("Record with provided id is not found"),
     AUTHENTICATION_ERROR("Authentication failed"),
-    COULD_NOT_UPDATE_RECORD("Could not update record"),
-    COULD_NOT_DELETE_RECORD("Could not delete record"),
-    EMAIL_ADDRESS_NOT_VERIFIED("Email address could not br verified");
+
+    // user
+    USER_RECORD_ALREADY_EXISTS("User record already exists"),
+    USER_NO_RECORD_FOUND("User record with provided id is not found"),
+    USER_COULD_NOT_UPDATE_RECORD("Could not update user record"),
+    USER_COULD_NOT_DELETE_RECORD("Could not delete user record"),
+    USER_EMAIL_ADDRESS_NOT_VERIFIED("User email address could not be verified"),
+
+    // address
+    ADDRESS_RECORD_ALREADY_EXISTS("Address record already exists"),
+    ADDRESS_NO_RECORD_FOUND("Address record with provided id is not found"),
+    ADDRESS_COULD_NOT_UPDATE_RECORD("Could not update address record"),
+    ADDRESS_COULD_NOT_DELETE_RECORD("Could not delete address record");
 
     private String errorMessage;
 
