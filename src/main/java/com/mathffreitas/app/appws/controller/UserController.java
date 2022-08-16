@@ -1,5 +1,6 @@
 package com.mathffreitas.app.appws.controller;
 
+import com.mathffreitas.app.appws.dto.AddressDto;
 import com.mathffreitas.app.appws.dto.UserDto;
 import com.mathffreitas.app.appws.exceptions.UserServiceException;
 import com.mathffreitas.app.appws.model.response.*;
@@ -8,13 +9,16 @@ import com.mathffreitas.app.appws.model.response.error.ErrorMessages;
 import com.mathffreitas.app.appws.model.response.operation.OperationStatusModel;
 import com.mathffreitas.app.appws.model.response.operation.RequestOperationName;
 import com.mathffreitas.app.appws.model.response.operation.RequestOperationStatus;
+import com.mathffreitas.app.appws.service.AddressService;
 import com.mathffreitas.app.appws.service.UserService;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +28,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    AddressService addressService;
 
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
@@ -42,16 +49,6 @@ public class UserController {
         return returnValue;
     }
 
-    @GetMapping(path = "/{userId}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }) // MediaType for XML & JSON response type support
-    public UserRest getUserById(@PathVariable String userId) {
-        UserRest returnValue = new UserRest();
-
-        UserDto userDto = userService.getUserByUserId(userId);
-        BeanUtils.copyProperties(userDto, returnValue);
-
-        return returnValue;
-    }
-
     @GetMapping
     public List<UserRest> getUsers(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "limit", defaultValue = "25") int limit) {
         List<UserRest> returnValue = new ArrayList<>();
@@ -62,6 +59,31 @@ public class UserController {
             UserRest userModel = new UserRest();
             BeanUtils.copyProperties(userDto, userModel);
             returnValue.add(userModel);
+        }
+
+        return returnValue;
+    }
+
+    @GetMapping(path = "/{userId}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }) // MediaType for XML & JSON response type support
+    public UserRest getUserById(@PathVariable String userId) {
+        UserRest returnValue = new UserRest();
+        ModelMapper modelMapper = new ModelMapper();
+
+        UserDto userDto = userService.getUserByUserId(userId);
+        returnValue = modelMapper.map(userDto, UserRest.class);
+
+        return returnValue;
+    }
+
+    @GetMapping(path = "/{userId}/addresses", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }) // MediaType for XML & JSON response type support
+    public List<AddressesRest> getUserAddresses(@PathVariable String userId) {
+        List<AddressesRest> returnValue = new ArrayList<>();
+
+        List<AddressDto> addressDto = addressService.getAddresses(userId);
+
+        if(addressDto != null && !addressDto.isEmpty()) {
+            Type listType = new TypeToken<List<AddressesRest>>() {}.getType();
+            returnValue = new ModelMapper().map(addressDto, listType);
         }
 
         return returnValue;

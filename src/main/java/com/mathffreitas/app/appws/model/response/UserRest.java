@@ -1,6 +1,6 @@
 package com.mathffreitas.app.appws.model.response;
 
-import java.util.UUID;
+import java.util.List;
 
 public class UserRest {
 
@@ -8,6 +8,7 @@ public class UserRest {
     private String firstName;
     private String lastName;
     private String email;
+    private List<AddressesRest> addresses;
 
     public UserRest() {
     }
@@ -48,5 +49,13 @@ public class UserRest {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<AddressesRest> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<AddressesRest> addresses) {
+        this.addresses = addresses;
     }
 }
