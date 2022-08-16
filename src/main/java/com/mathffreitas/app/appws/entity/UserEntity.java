@@ -1,6 +1,7 @@
 package com.mathffreitas.app.appws.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity(name = "users")
 public class UserEntity {
@@ -28,6 +29,9 @@ public class UserEntity {
 
     @Column(nullable = false)
     private Boolean emailVerificationStatus = false;
+
+    @OneToMany(mappedBy = "userDetails", cascade = CascadeType.ALL) // variable name from Address Entity (annotated with JoinColumn)
+    private List<AddressEntity> addresses;
 
     public Long getId() {
         return id;
@@ -91,5 +95,17 @@ public class UserEntity {
 
     public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
         this.emailVerificationStatus = emailVerificationStatus;
+    }
+
+    public Boolean getEmailVerificationStatus() {
+        return emailVerificationStatus;
+    }
+
+    public List<AddressEntity> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<AddressEntity> addresses) {
+        this.addresses = addresses;
     }
 }

@@ -1,10 +1,9 @@
 package com.mathffreitas.app.appws.model.request;
 
+import java.util.List;
 import java.util.UUID;
 
 public class UserDetailsRequestModel {
-
-    private UUID id;
 
     private String firstName;
 
@@ -13,6 +12,8 @@ public class UserDetailsRequestModel {
     private String email;
 
     private String password;
+
+    private List<AddressRequestModel> addresses;
 
     public UserDetailsRequestModel() {
 
@@ -23,14 +24,6 @@ public class UserDetailsRequestModel {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -65,14 +58,11 @@ public class UserDetailsRequestModel {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "UserDetail{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+    public List<AddressRequestModel> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<AddressRequestModel> addresses) {
+        this.addresses = addresses;
     }
 }

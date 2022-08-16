@@ -11,6 +11,7 @@
 	<groupId>com.mathffreitas.app</groupId>
 	<artifactId>app-ws</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging> <!-- added to generate war files -->
 	<name>app-ws</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -46,6 +47,19 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>
+		</dependency>
+
+		<!-- added to generate war files  -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>3.0.0</version>
 		</dependency>
 
 		<dependency>

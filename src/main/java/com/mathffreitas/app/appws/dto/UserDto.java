@@ -2,6 +2,7 @@ package com.mathffreitas.app.appws.dto;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 //Data Transferred Object
@@ -15,7 +16,9 @@ import java.util.UUID;
  */
 public class UserDto implements Serializable{
 
-    private UUID id;
+    @Serial
+    private static final long serialVersionUID = 6835192601898364280L;
+    private Long id;
     private String userId;
     private String firstName;
     private String lastName;
@@ -24,6 +27,8 @@ public class UserDto implements Serializable{
     private String encryptedPassword;
     private String emailVerificationToken;
     private Boolean emailVerificationStatus = false;
+
+    private List<AddressDto> addresses;
 
     public UserDto() {
 
@@ -39,11 +44,11 @@ public class UserDto implements Serializable{
         this.emailVerificationStatus = emailVerificationStatus;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -109,6 +114,14 @@ public class UserDto implements Serializable{
 
     public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
         this.emailVerificationStatus = emailVerificationStatus;
+    }
+
+    public List<AddressDto> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<AddressDto> addresses) {
+        this.addresses = addresses;
     }
 }
 
