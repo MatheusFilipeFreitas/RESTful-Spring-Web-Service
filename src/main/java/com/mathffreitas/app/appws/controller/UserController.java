@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@RequestMapping("users") // http://localhost:8080/users
+@RequestMapping("/users") // http://localhost:8080/users
 public class UserController {
 
     @Autowired
@@ -101,13 +101,22 @@ public class UserController {
         AddressesRest returnValue = modelMapper.map(addressDto, AddressesRest.class);
 
         // http://localhost:8080/users/<userId>
-        Link userLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).withRel("user");
+        Link userLink = WebMvcLinkBuilder.linkTo(UserController.class)
+                .slash(userId)
+                .withRel("user");
 
         // http://localhost:8080/users/<userId>/addresses
-        Link userAddressesLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).slash("addresses").withRel("addresses");
+        Link userAddressesLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddresses(userId))
+                //.slash(userId)
+                //.slash("addresses")
+                .withRel("addresses");
 
-
-        Link selfLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).slash("addresses").slash(addressId).withSelfRel();
+        // http://localhost:8080/users/<userId>/addresses/<addressId>
+        Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddress(addressId, userId))
+                //.slash(userId)
+                //.slash("addresses")
+                //.slash(addressId)
+                .withSelfRel();
 
         //returnValue.add(userLink);
         //returnValue.add(userAddressesLink);
