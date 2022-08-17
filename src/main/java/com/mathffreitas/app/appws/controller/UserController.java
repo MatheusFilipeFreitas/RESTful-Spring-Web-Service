@@ -91,7 +91,7 @@ public class UserController {
             returnValue = new ModelMapper().map(addressDto, listType);
 
             for(AddressesRest addressRest : returnValue) {
-                
+
                 // http://localhost:8080/users/<userId>/addresses/<addressId>
                 Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddress(addressRest.getAddressId(), userId))
                         //.slash(userId)
