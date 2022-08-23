@@ -150,6 +150,7 @@ public class UserController {
         return EntityModel.of(returnValue, Arrays.asList(userLink, userAddressesLink, selfLink));
     }
 
+    // http://localhost:8080/app-ws/users/email-verification?token=<token>
     @GetMapping(path = "/email-verification", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public OperationStatusModel verifyEmailToken(@RequestParam(value = "token") String token) {
 

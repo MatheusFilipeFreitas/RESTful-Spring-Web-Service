@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication				 // "extends SpringBootServletInitializer" (for generating WAR file)
@@ -35,5 +36,6 @@ public class AppWsApplication extends SpringBootServletInitializer {
 	public AppProperties getAppProperties() {
 		return new AppProperties();
 	}
+
 
 }

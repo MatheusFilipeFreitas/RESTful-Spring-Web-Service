@@ -3,6 +3,7 @@ package com.mathffreitas.app.appws.shared;
 import com.mathffreitas.app.appws.security.SecurityConstants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
@@ -40,9 +41,17 @@ public class Utils {
                 .setSigningKey(SecurityConstants.getTokenSecret())
                 .parseClaimsJws(token).getBody();
 
-        Date tokenExpirationDate = claims.getExpiration();
+        Date tokenExpirationDate = claims.getExpiration(); //expiration date is from security constants
         Date todayDate = new Date();
 
         return tokenExpirationDate.before(todayDate);
+    }
+
+    public String generateEmailVerificationToken(String userId) {
+        String token = Jwts.builder().setSubject(userId).setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret())
+                .compact();
+
+        return token;
     }
 }
