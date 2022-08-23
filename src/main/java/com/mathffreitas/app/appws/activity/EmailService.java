@@ -24,7 +24,7 @@ public class EmailService implements EmailSender {
 
     @Override
     @Async
-    public void send(String to, String email) {
+    public void sendVerification(String to, String email) {
             try{
                 MimeMessage mimeMessage = mailSender.createMimeMessage();
                 MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
@@ -35,7 +35,27 @@ public class EmailService implements EmailSender {
                 mailSender.send(mimeMessage);
             }catch(MessagingException e) {
                 LOGGER.error("Failed to send", e);
-                throw new IllegalStateException("failed to send email");
+                throw new IllegalStateException("Failed to send email");
             }
+    }
+
+    @Override
+    @Async
+    public boolean sendPasswordReset(String to, String email) {
+        boolean returnValue = false;
+        try{
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+            helper.setText(email, true);
+            helper.setTo(to);
+            helper.setSubject("Password Reset");
+            helper.setFrom("zvetfuze@gmail.com");
+            mailSender.send(mimeMessage);
+            returnValue = true;
+        }catch(MessagingException e) {
+            LOGGER.error("Failed to send", e);
+            throw new IllegalStateException("Failed to send email");
+        }
+        return returnValue;
     }
 }

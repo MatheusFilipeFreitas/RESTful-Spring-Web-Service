@@ -13,6 +13,8 @@ public enum ErrorMessages {
     USER_COULD_NOT_UPDATE_RECORD("Could not update user record"),
     USER_COULD_NOT_DELETE_RECORD("Could not delete user record"),
     USER_EMAIL_ADDRESS_NOT_VERIFIED("User email address could not be verified"),
+    USER_PASSWORD_TOKEN_EXPIRED("User reset password token has already expired"),
+    USER_PASSWORD_TOKEN_NOT_FOUND("User reset password token is not found"),
 
     // address
     ADDRESS_RECORD_ALREADY_EXISTS("Address record already exists"),

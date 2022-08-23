@@ -2,5 +2,6 @@ package com.mathffreitas.app.appws.activity;
 
 public interface EmailSender {
 
-    void send (String to, String email);
+    void sendVerification (String to, String email);
+    public boolean sendPasswordReset(String to, String email);
 }
