@@ -2,6 +2,7 @@ package com.mathffreitas.app.appws.shared;
 
 import com.mathffreitas.app.appws.security.SecurityConstants;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
@@ -37,14 +38,21 @@ public class Utils {
     }
 
     public static boolean hasTokenExpired(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(SecurityConstants.getTokenSecret())
-                .parseClaimsJws(token).getBody();
+        boolean returnValue = false;
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(SecurityConstants.getTokenSecret())
+                    .parseClaimsJws(token).getBody();
 
-        Date tokenExpirationDate = claims.getExpiration(); //expiration date is from security constants
-        Date todayDate = new Date();
+            Date tokenExpirationDate = claims.getExpiration(); //expiration date is from security constants
+            Date todayDate = new Date();
 
-        return tokenExpirationDate.before(todayDate);
+            returnValue = tokenExpirationDate.before(todayDate);
+        } catch (ExpiredJwtException ex){
+            returnValue = true;
+        }
+
+        return returnValue;
     }
 
     public String generateEmailVerificationToken(String userId) {

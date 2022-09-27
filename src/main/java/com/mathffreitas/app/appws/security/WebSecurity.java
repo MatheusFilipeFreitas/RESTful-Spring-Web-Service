@@ -18,7 +18,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     public WebSecurity(UserService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userDetailsService = userDetailsService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-
     }
 
     @Override
@@ -45,7 +44,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
-
     }
 
     // creating custom user authentication url (login)
