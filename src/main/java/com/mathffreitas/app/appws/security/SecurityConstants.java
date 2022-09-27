@@ -15,6 +15,8 @@ public class SecurityConstants {
 
     public static final String PASSWORD_RESET_URL = "/users/password-reset"; // reset password
 
+    public static final String H2_CONSOLE = "/h2-console/**";
+
     public static String getTokenSecret() {
         AppProperties appProperties = (AppProperties) SpringApplicationContext.getBean("AppProperties");
         return appProperties.getTokenSecret();

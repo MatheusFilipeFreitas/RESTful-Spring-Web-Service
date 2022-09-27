@@ -31,6 +31,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(HttpMethod.POST, SecurityConstants.PASSWORD_RESET_URL)
                 .permitAll()
+                .antMatchers(SecurityConstants.H2_CONSOLE)
+                .permitAll()
                 .anyRequest().authenticated() //any other authentication need to be authenticated
                 .and().addFilter(getAuthenticationFilter())
                 .addFilter(new AuthorizationFilter(authenticationManager()))
@@ -38,6 +40,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
                 // fix the cookie issue (prevent authorization header from been cashed)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        //line above is just for h2 usage!
+        http.headers().frameOptions().disable();
 
     }
 
