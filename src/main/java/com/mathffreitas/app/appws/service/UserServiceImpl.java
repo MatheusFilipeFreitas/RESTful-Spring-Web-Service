@@ -30,6 +30,9 @@ import java.util.List;
 public class UserServiceImpl implements UserService{
 
     @Autowired
+    AddressService addressService;
+
+    @Autowired
     Utils utils;
 
     @Autowired
@@ -86,11 +89,11 @@ public class UserServiceImpl implements UserService{
         UserDto returnValue = new UserDto();
         UserEntity userEntity = userRepository.findByUserId(userId);
 
-        //TODO: Implement find addresses by User ID
-
         if(userEntity == null) throw new UserServiceException(ErrorMessages.USER_NO_RECORD_FOUND.getErrorMessage());
 
+        List<AddressDto> addressesDto = addressService.getAddresses(userId);
         BeanUtils.copyProperties(userEntity, returnValue);
+        returnValue.setAddresses(addressesDto);
 
         return returnValue;
     }
@@ -148,7 +151,6 @@ public class UserServiceImpl implements UserService{
             UserDto userDto = new UserDto();
             BeanUtils.copyProperties(userEntity, userDto);
             returnValue.add(userDto);
-
         }
         return returnValue;
 
