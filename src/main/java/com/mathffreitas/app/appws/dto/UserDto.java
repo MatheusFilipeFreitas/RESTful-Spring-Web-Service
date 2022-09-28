@@ -1,5 +1,8 @@
 package com.mathffreitas.app.appws.dto;
 
+import com.mathffreitas.app.appws.entity.UserEntity;
+import org.modelmapper.ModelMapper;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;

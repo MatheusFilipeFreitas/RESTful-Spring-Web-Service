@@ -1,6 +1,9 @@
 package com.mathffreitas.app.appws.service;
 
 import com.mathffreitas.app.appws.dto.UserDto;
+import com.mathffreitas.app.appws.model.response.UserRest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -15,7 +18,7 @@ public interface UserService extends UserDetailsService {
 
     void deleteUser(String userId);
 
-    List<UserDto> getUsers(int page, int limit);
+    Page<UserRest> getUsers(Pageable pageable);
 
     boolean verifyEmailToken(String token);
 

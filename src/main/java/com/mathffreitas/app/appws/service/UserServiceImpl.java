@@ -6,11 +6,13 @@ import com.mathffreitas.app.appws.dto.UserDto;
 import com.mathffreitas.app.appws.entity.PasswordResetTokenEntity;
 import com.mathffreitas.app.appws.entity.UserEntity;
 import com.mathffreitas.app.appws.exceptions.UserServiceException;
+import com.mathffreitas.app.appws.model.response.UserRest;
 import com.mathffreitas.app.appws.model.response.error.ErrorMessages;
 import com.mathffreitas.app.appws.repository.PasswordResetTokenRepository;
 import com.mathffreitas.app.appws.repository.UserRepository;
 import com.mathffreitas.app.appws.shared.AmazonSES;
 import com.mathffreitas.app.appws.shared.Utils;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,22 +140,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<UserDto> getUsers(int page, int limit) {
-        List<UserDto> returnValue = new ArrayList<>();
-
-        if(page>0) page = page - 1;
-
-        Pageable pagebleRequest = PageRequest.of(page, limit);
-        Page<UserEntity> usersPage = userRepository.findAll(pagebleRequest);
-        List<UserEntity> users = usersPage.getContent();
-
-        for(UserEntity userEntity : users) {
-            UserDto userDto = new UserDto();
-            BeanUtils.copyProperties(userEntity, userDto);
-            returnValue.add(userDto);
-        }
-        return returnValue;
-
+    public Page<UserRest> getUsers(Pageable pageable) {
+        Page<UserRest> dtoPage = userRepository.findAll(pageable).map(UserRest::toRest);
+        return dtoPage;
     }
 
     @Override

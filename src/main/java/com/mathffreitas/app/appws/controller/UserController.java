@@ -17,11 +17,17 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Type;
@@ -57,50 +63,9 @@ public class UserController {
     }
 
     @GetMapping
-    public CollectionModel<UserRest> getUsers(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "limit", defaultValue = "25") int limit) {
-        List<UserRest> returnValue = new ArrayList<>();
+    public ResponseEntity<Page<UserRest>> getUsers(@PageableDefault(page = 0, size = 10) Pageable pageable) {
 
-        List<UserDto> users = userService.getUsers(page, limit);
-        Type listType = new TypeToken<List<AddressesRest>>() {}.getType();
-
-        for(UserDto userDto : users) {
-            UserRest userModel = new UserRest();
-            BeanUtils.copyProperties(userDto, userModel);
-
-            List<AddressesRest> addressesRests = new ArrayList<>();
-            List<AddressDto> addressDtos = addressService.getAddresses(userDto.getUserId());
-            for(AddressDto addressDto : addressDtos){
-                AddressesRest addressRest = new AddressesRest();
-                BeanUtils.copyProperties(addressDto, addressRest);
-                Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddress(addressRest.getAddressId(), userModel.getUserId()))
-                        //.slash(userId)
-                        //.slash("addresses")
-                        //.slash(addressId)
-                        .withSelfRel();
-
-                addressRest.add(selfLink);
-                addressesRests.add(addressRest);
-            }
-            // http://localhost:8080/users/<userId>
-            Link userLink = WebMvcLinkBuilder.linkTo(UserController.class)
-                    .slash(userModel.getUserId())
-                    .withRel("user");
-
-            Link addressesUser = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddresses(userModel.getUserId()))
-                    //.slash(userId)
-                    //.slash("addresses")
-                    //.slash(addressId)
-                    .withRel("addresses");
-
-            userModel.setAddresses(addressesRests);
-            userModel.add(userLink);
-            userModel.add(addressesUser);
-            returnValue.add(userModel);
-        }
-
-
-
-        return CollectionModel.of(returnValue);
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUsers(pageable));
     }
 
     @GetMapping(path = "/{userId}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }) // MediaType for XML & JSON response type support
