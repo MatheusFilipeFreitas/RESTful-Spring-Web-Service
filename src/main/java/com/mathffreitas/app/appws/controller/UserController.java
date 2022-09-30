@@ -37,6 +37,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users") // http://localhost:8080/users
+@CrossOrigin(origins = "*") //(origins = "http://localhost:4042") -> specific origin; (origins = {"http://localhost:8888","http://localhost:4042"}) -> multiple origins
 public class UserController {
 
     @Autowired
@@ -167,7 +168,9 @@ public class UserController {
     }
 
     // http://localhost:8080/app-ws/users/email-verification?token=<token>
-    @CrossOrigin(origins = "*")
+
+    //Specific method
+    //@CrossOrigin(origins = "*") (origins = "http://localhost:4042") -> specific origin; (origins = {"http://localhost:8888","http://localhost:4042"}) -> multiple origins
     @GetMapping(path = "/email-verification", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public OperationStatusModel verifyEmailToken(@RequestParam(value = "token") String token) {
 
