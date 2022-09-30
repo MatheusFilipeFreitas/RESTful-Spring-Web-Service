@@ -1,4 +1,4 @@
-package com.mathffreitas.app.appws;
+package com.mathffreitas.app.appws.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
