@@ -167,6 +167,7 @@ public class UserController {
     }
 
     // http://localhost:8080/app-ws/users/email-verification?token=<token>
+    @CrossOrigin(origins = "*")
     @GetMapping(path = "/email-verification", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public OperationStatusModel verifyEmailToken(@RequestParam(value = "token") String token) {
 
@@ -184,7 +185,7 @@ public class UserController {
         return returnValue;
     }
 
-    @PutMapping(path = "/{userId}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    @PatchMapping(path = "/{userId}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public UserRest updateUser(@PathVariable String userId, @RequestBody UserDetailsRequestModel userDetails) {
         UserRest returnValue = new UserRest();
 
@@ -194,7 +195,9 @@ public class UserController {
         BeanUtils.copyProperties(userDetails, userDto);
 
         UserDto updateUser = userService.updateUser(userId, userDto);
-        BeanUtils.copyProperties(updateUser, returnValue);
+        returnValue = new ModelMapper().map(updateUser, UserRest.class);
+
+        System.out.println(returnValue.getAddresses().size());
 
         return returnValue;
     }

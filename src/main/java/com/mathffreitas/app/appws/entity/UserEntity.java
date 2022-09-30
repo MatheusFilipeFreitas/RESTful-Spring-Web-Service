@@ -3,7 +3,8 @@ package com.mathffreitas.app.appws.entity;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity(name = "users")
+@Table(name = "users")
+@Entity
 public class UserEntity {
 
     @Id

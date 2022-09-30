@@ -122,10 +122,12 @@ public class UserServiceImpl implements UserService{
 
         userEntity.setFirstName(user.getFirstName());
         userEntity.setLastName(user.getLastName());
+        List<AddressDto> addressesDto = addressService.getAddresses(userId);
 
         UserEntity updatedUserDetail = userRepository.save(userEntity);
 
         BeanUtils.copyProperties(updatedUserDetail, returnValue);
+        returnValue.setAddresses(addressesDto);
 
         return returnValue;
     }
