@@ -37,7 +37,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users") // http://localhost:8080/users
-@CrossOrigin(origins = "*") //(origins = "http://localhost:4042") -> specific origin; (origins = {"http://localhost:8888","http://localhost:4042"}) -> multiple origins
+//@CrossOrigin(origins = "*") //(origins = "http://localhost:4042") -> specific origin; (origins = {"http://localhost:8888","http://localhost:4042"}) -> multiple origins
 public class UserController {
 
     @Autowired
