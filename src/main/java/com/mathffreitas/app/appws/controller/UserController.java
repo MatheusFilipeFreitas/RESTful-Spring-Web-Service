@@ -13,6 +13,9 @@ import com.mathffreitas.app.appws.model.response.operation.RequestOperationName;
 import com.mathffreitas.app.appws.model.response.operation.RequestOperationStatus;
 import com.mathffreitas.app.appws.service.AddressService;
 import com.mathffreitas.app.appws.service.UserService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
@@ -46,6 +49,7 @@ public class UserController {
     @Autowired
     AddressService addressService;
 
+    @ApiOperation(value = "Create a new User")
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
         UserRest returnValue = new UserRest();
@@ -63,12 +67,20 @@ public class UserController {
         return returnValue;
     }
 
+    @ApiOperation(value = "Get a page of Users")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header") //in value, its getting the userController.authorizationHeader.description of application.properties
+    })
     @GetMapping
     public ResponseEntity<Page<UserRest>> getUsers(@PageableDefault(page = 0, size = 10) Pageable pageable) {
 
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUsers(pageable));
     }
 
+    @ApiOperation(value = "Get an Users by public userID")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header") //in value, its getting the userController.authorizationHeader.description of application.properties
+    })
     @GetMapping(path = "/{userId}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }) // MediaType for XML & JSON response type support
     public EntityModel<UserRest> getUserById(@PathVariable String userId) {
         UserRest returnValue = new UserRest();
@@ -97,6 +109,10 @@ public class UserController {
         return EntityModel.of(returnValue, Arrays.asList(selfLink, userAddressesLink));
     }
 
+    @ApiOperation(value = "Get a List of Addresses from a specific User by public userID")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header") //in value, its getting the userController.authorizationHeader.description of application.properties
+    })
     @GetMapping(path = "/{userId}/addresses", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }) // MediaType for XML & JSON response type support
     public CollectionModel<AddressesRest> getUserAddresses(@PathVariable String userId) {
         List<AddressesRest> returnValue = new ArrayList<>();
@@ -135,6 +151,10 @@ public class UserController {
         return CollectionModel.of(returnValue, userLink, selfLink);
     }
 
+    @ApiOperation(value = "Get an specific Address by public addressID from a specific User by public userID")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header") //in value, its getting the userController.authorizationHeader.description of application.properties
+    })
     @GetMapping(path = "/{userId}/addresses/{addressId}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public EntityModel<AddressesRest> getUserAddress(@PathVariable String addressId, @PathVariable String userId) {
         AddressDto addressDto = addressService.getAddress(addressId, userId);
@@ -188,6 +208,10 @@ public class UserController {
         return returnValue;
     }
 
+    @ApiOperation(value = "Update an User by public userID")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header") //in value, its getting the userController.authorizationHeader.description of application.properties
+    })
     @PatchMapping(path = "/{userId}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public UserRest updateUser(@PathVariable String userId, @RequestBody UserDetailsRequestModel userDetails) {
         UserRest returnValue = new UserRest();
@@ -205,6 +229,7 @@ public class UserController {
         return returnValue;
     }
 
+    @ApiOperation(value = "Delete an User by public userID")
     @DeleteMapping(path = "/{userId}")
     public OperationStatusModel deleteUser(@PathVariable String userId) {
 

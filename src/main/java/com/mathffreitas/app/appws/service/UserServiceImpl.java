@@ -12,6 +12,7 @@ import com.mathffreitas.app.appws.repository.PasswordResetTokenRepository;
 import com.mathffreitas.app.appws.repository.UserRepository;
 import com.mathffreitas.app.appws.shared.AmazonSES;
 import com.mathffreitas.app.appws.shared.Utils;
+import com.sun.mail.util.MailConnectException;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -80,7 +81,11 @@ public class UserServiceImpl implements UserService{
 
         // Send an email message to verify their email address
         String link = "http://localhost:8080/app-ws/users/email-verification?token=" + userEntity.getEmailVerificationToken();
-        mailSender.sendVerification(userEntity.getEmail(), buildEmailVerificationToken(userEntity.getFirstName(),userEntity.getLastName(), link));
+        try {
+            mailSender.sendVerification(userEntity.getEmail(), buildEmailVerificationToken(userEntity.getFirstName(), userEntity.getLastName(), link));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         //new AmazonSES().verifyEmail(returnValue);
 
         return returnValue;
