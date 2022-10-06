@@ -46,7 +46,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**")
                 .permitAll()
+                //.antMatchers(HttpMethod.DELETE, "/users/**").hasAnyRole("ADMIN","SUPER_ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN") //spring security auto complete with "ROLE_" so "ROLE_ADMIN"
+                //.antMatchers(HttpMethod.DELETE, "/users/**").hasAuthority("DELETE_AUTHORITY")
+//                .antMatchers(HttpMethod.DELETE, "/users/**").hasAnyAuthority("DELETE_AUTHORITY","DELETE_ALL_AUTHORITY")
                 .anyRequest().authenticated() //any other authentication need to be authenticated
                 .and().addFilter(getAuthenticationFilter())
                 .addFilter(new AuthorizationFilter(authenticationManager(), userRepository))
