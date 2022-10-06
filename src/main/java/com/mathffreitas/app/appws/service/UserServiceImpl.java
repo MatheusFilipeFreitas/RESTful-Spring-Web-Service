@@ -10,6 +10,7 @@ import com.mathffreitas.app.appws.model.response.UserRest;
 import com.mathffreitas.app.appws.model.response.error.ErrorMessages;
 import com.mathffreitas.app.appws.repository.PasswordResetTokenRepository;
 import com.mathffreitas.app.appws.repository.UserRepository;
+import com.mathffreitas.app.appws.security.UserPrincipal;
 import com.mathffreitas.app.appws.shared.AmazonSES;
 import com.mathffreitas.app.appws.shared.Utils;
 import com.sun.mail.util.MailConnectException;
@@ -234,7 +235,8 @@ public class UserServiceImpl implements UserService{
 
         if(userEntity == null) throw new UserServiceException(ErrorMessages.USER_NO_RECORD_FOUND.getErrorMessage());
 
-        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), userEntity.getEmailVerificationStatus(), true, true, true, new ArrayList<>());
+        return new UserPrincipal(userEntity);
+//        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), userEntity.getEmailVerificationStatus(), true, true, true, new ArrayList<>());
 
         //return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
     }

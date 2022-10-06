@@ -1,5 +1,6 @@
 package com.mathffreitas.app.appws.security;
 
+import com.mathffreitas.app.appws.repository.UserRepository;
 import com.mathffreitas.app.appws.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -20,10 +21,12 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     private final UserService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserRepository userRepository;
 
-    public WebSecurity(UserService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public WebSecurity(UserService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder, UserRepository userRepository) {
         this.userDetailsService = userDetailsService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -43,9 +46,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**")
                 .permitAll()
+                .antMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN") //spring security auto complete with "ROLE_" so "ROLE_ADMIN"
                 .anyRequest().authenticated() //any other authentication need to be authenticated
                 .and().addFilter(getAuthenticationFilter())
-                .addFilter(new AuthorizationFilter(authenticationManager()))
+                .addFilter(new AuthorizationFilter(authenticationManager(), userRepository))
                 //.and().addFilter(new AuthenticationFilter(authenticationManager())) (/login) url snippet
 
                 // fix the cookie issue (prevent authorization header from been cashed)
