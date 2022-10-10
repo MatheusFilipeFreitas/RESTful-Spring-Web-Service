@@ -73,6 +73,7 @@ public class UserController {
         return returnValue;
     }
 
+    // TODO: Just ADMIN usage
     @ApiOperation(value = "Get a page of Users")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header") //in value, its getting the userController.authorizationHeader.description of application.properties
@@ -198,6 +199,7 @@ public class UserController {
 
     //Specific method
     //@CrossOrigin(origins = "*") (origins = "http://localhost:4042") -> specific origin; (origins = {"http://localhost:8888","http://localhost:4042"}) -> multiple origins
+    @ApiOperation(value = "Validate an user's email")
     @GetMapping(path = "/email-verification", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public OperationStatusModel verifyEmailToken(@RequestParam(value = "token") String token) {
 
@@ -256,6 +258,7 @@ public class UserController {
     }
 
     // http://localhost:8080/app-ws/users/password-reset-request
+    @ApiOperation(value = "Request the password reset")
     @PostMapping(path = "/password-reset-request", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public OperationStatusModel requestReset(@RequestBody PasswordResetRequestModel passwordResetRequestModel) {
         OperationStatusModel returnValue = new OperationStatusModel();
@@ -272,6 +275,7 @@ public class UserController {
         return returnValue;
     }
 
+    @ApiOperation(value = "Update the password (from password reset)")
     @PostMapping(path = "/password-reset", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public OperationStatusModel resetPassword(@RequestBody PasswordResetModel passwordResetModel) {
         OperationStatusModel returnValue = new OperationStatusModel();

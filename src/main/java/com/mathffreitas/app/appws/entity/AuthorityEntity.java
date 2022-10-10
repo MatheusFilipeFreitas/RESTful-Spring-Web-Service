@@ -1,10 +1,19 @@
 package com.mathffreitas.app.appws.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "authorities")
 public class AuthorityEntity implements Serializable {
 
@@ -21,35 +30,8 @@ public class AuthorityEntity implements Serializable {
     @ManyToMany(mappedBy = "authorities")
     private Collection<RoleEntity> roles;
 
-    public AuthorityEntity(){
-
-    }
-
     public AuthorityEntity(String name) {
         this.name = name;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Collection<RoleEntity> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Collection<RoleEntity> roles) {
-        this.roles = roles;
-    }
 }

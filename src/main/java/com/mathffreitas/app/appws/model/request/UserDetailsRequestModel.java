@@ -1,8 +1,17 @@
 package com.mathffreitas.app.appws.model.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.List;
 import java.util.UUID;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDetailsRequestModel {
 
     private String firstName;
@@ -15,9 +24,6 @@ public class UserDetailsRequestModel {
 
     private List<AddressRequestModel> addresses;
 
-    public UserDetailsRequestModel() {
-
-    }
 
     public UserDetailsRequestModel(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
@@ -26,43 +32,4 @@ public class UserDetailsRequestModel {
         this.password = password;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<AddressRequestModel> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(List<AddressRequestModel> addresses) {
-        this.addresses = addresses;
-    }
 }

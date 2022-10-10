@@ -3,10 +3,15 @@ package com.mathffreitas.app.appws.security;
 import com.mathffreitas.app.appws.entity.AuthorityEntity;
 import com.mathffreitas.app.appws.entity.RoleEntity;
 import com.mathffreitas.app.appws.entity.UserEntity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -15,9 +20,10 @@ import java.util.List;
 public class UserPrincipal implements UserDetails {
 
 
+    @Serial
     private static final long serialVersionUID = 5092538006975841343L;
 
-    private UserEntity userEntity;
+    private final UserEntity userEntity;
 
     private String userId;
     public UserPrincipal(UserEntity userEntity) {

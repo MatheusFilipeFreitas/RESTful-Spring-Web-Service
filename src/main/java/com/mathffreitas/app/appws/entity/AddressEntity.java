@@ -1,12 +1,20 @@
 package com.mathffreitas.app.appws.entity;
 
 import com.mathffreitas.app.appws.dto.UserDto;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 
 @Entity(name="addresses")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class AddressEntity implements Serializable {
 
     @Serial
@@ -36,70 +44,7 @@ public class AddressEntity implements Serializable {
 
     // (parent -> child) PERSIST = save; MERGE = update; REMOVE = delete; REFRESH = refresh from database; DETACH = remove from persistent context;
     @ManyToOne
-    @JoinColumn(name="users_id")
+    @JoinColumn(name = "users_id")
     private UserEntity userDetails;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getAddressId() {
-        return addressId;
-    }
-
-    public void setAddressId(String addressId) {
-        this.addressId = addressId;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getStreetName() {
-        return streetName;
-    }
-
-    public void setStreetName(String streetName) {
-        this.streetName = streetName;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public UserEntity getUserDetails() {
-        return userDetails;
-    }
-
-    public void setUserDetails(UserEntity userDetails) {
-        this.userDetails = userDetails;
-    }
 }

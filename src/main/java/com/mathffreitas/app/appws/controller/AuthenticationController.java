@@ -12,7 +12,6 @@ import com.mathffreitas.app.appws.model.request.LoginRequestModel;
 @RestController()
 public class AuthenticationController {
 
-    //TODO: Add this @ApiOperation to other methods
     @ApiOperation("Log with a User already created in the System")
     @ApiResponses(value = {
             @ApiResponse(code = 200,
