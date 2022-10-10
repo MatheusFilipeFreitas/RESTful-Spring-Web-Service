@@ -4,14 +4,17 @@ import com.mathffreitas.app.appws.activity.EmailSender;
 import com.mathffreitas.app.appws.dto.AddressDto;
 import com.mathffreitas.app.appws.dto.UserDto;
 import com.mathffreitas.app.appws.entity.PasswordResetTokenEntity;
+import com.mathffreitas.app.appws.entity.RoleEntity;
 import com.mathffreitas.app.appws.entity.UserEntity;
 import com.mathffreitas.app.appws.exceptions.UserServiceException;
 import com.mathffreitas.app.appws.model.response.UserRest;
 import com.mathffreitas.app.appws.model.response.error.ErrorMessages;
 import com.mathffreitas.app.appws.repository.PasswordResetTokenRepository;
+import com.mathffreitas.app.appws.repository.RoleRepository;
 import com.mathffreitas.app.appws.repository.UserRepository;
 import com.mathffreitas.app.appws.security.UserPrincipal;
 import com.mathffreitas.app.appws.shared.AmazonSES;
+import com.mathffreitas.app.appws.shared.Roles;
 import com.mathffreitas.app.appws.shared.Utils;
 import com.sun.mail.util.MailConnectException;
 import org.modelmapper.Converter;
@@ -28,6 +31,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -50,6 +55,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     EmailSender mailSender;
+
+    @Autowired
+    RoleRepository roleRepository;
 
     @Override
     public UserDto createUser(UserDto user) {
@@ -74,6 +82,18 @@ public class UserServiceImpl implements UserService{
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userEntity.setEmailVerificationToken(utils.generateEmailVerificationToken(publicUserId));
         userEntity.setEmailVerificationStatus(false);
+
+
+        //set roles
+        Collection<RoleEntity> roleEntities = new HashSet<>();
+        for(String role: user.getRoles()){
+            RoleEntity roleEntity = roleRepository.findByName(role);
+            if(roleEntity != null) {
+                roleEntities.add(roleEntity);
+            }
+        }
+
+        userEntity.setRoles(roleEntities);
 
         UserEntity storedUserDetail = userRepository.save(userEntity);
 

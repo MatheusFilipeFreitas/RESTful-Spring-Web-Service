@@ -13,6 +13,7 @@ import com.mathffreitas.app.appws.model.response.operation.RequestOperationName;
 import com.mathffreitas.app.appws.model.response.operation.RequestOperationStatus;
 import com.mathffreitas.app.appws.service.AddressService;
 import com.mathffreitas.app.appws.service.UserService;
+import com.mathffreitas.app.appws.shared.Roles;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -32,11 +33,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -61,6 +65,7 @@ public class UserController {
         //BeanUtils.copyProperties(userDetails, userDto);
         ModelMapper modelMapper = new ModelMapper();
         UserDto userDto = modelMapper.map(userDetails, UserDto.class);
+        userDto.setRoles(new HashSet<>(Arrays.asList(Roles.ROLE_USER.name())));
 
         UserDto createdUser = userService.createUser(userDto);
         returnValue = modelMapper.map(createdUser, UserRest.class);
@@ -78,6 +83,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUsers(pageable));
     }
 
+    //@PostAuthorize("hasRole("ROLE_ADMIN") or returnObject.userId == userPrincipal.userId") //'userPrincipal' is from AuthorizationFilter
     @ApiOperation(value = "Get an Users by public userID")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header") //in value, its getting the userController.authorizationHeader.description of application.properties
@@ -230,9 +236,14 @@ public class UserController {
         return returnValue;
     }
 
+    //@PreAuthorize("hasRole('ROLE_ADMIN') or #userId == userPrincipal.userId") //'#userId' = path variable and 'userPrincipal' is from AuthorizationFilter
+    //@PreAuthorize(value = "hasAuthority('DELETE_AUTHORITY')")
     @Secured("ROLE_ADMIN")
     @ApiOperation(value = "Delete an User by public userID")
-    @DeleteMapping(path = "/{userId}")
+    @DeleteMapping(path = "/{userId}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")
+    })
     public OperationStatusModel deleteUser(@PathVariable String userId) {
 
         OperationStatusModel returnValue = new OperationStatusModel();

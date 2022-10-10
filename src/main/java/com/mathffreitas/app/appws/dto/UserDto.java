@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,8 +31,9 @@ public class UserDto implements Serializable{
     private String encryptedPassword;
     private String emailVerificationToken;
     private Boolean emailVerificationStatus = false;
-
     private List<AddressDto> addresses;
+    private Collection<String> roles;
+
 
     public UserDto() {
 
@@ -125,6 +127,14 @@ public class UserDto implements Serializable{
 
     public void setAddresses(List<AddressDto> addresses) {
         this.addresses = addresses;
+    }
+
+    public Collection<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<String> roles) {
+        this.roles = roles;
     }
 }
 
